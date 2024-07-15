@@ -1,0 +1,19 @@
+{
+  "name": "docpose",
+  "version": "1.0.0",
+  "description": "A standalone executable for docpose",
+  "bin": {
+    "docpose": "./dist/docpose"
+  },
+  "scripts": {
+    "start": "dist/docpose",
+    "build": "pyinstaller --onefile ~/projects/acap/docpose/docpose.py",
+    "postinstall": "pip install -r .pydependencies.txt"
+  },
+  "author": "Eugen Hildt",
+  "license": "MIT",
+  "files": [
+    "dist/docpose",
+    "src/docpose.py"
+  ]
+}

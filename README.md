@@ -1,2 +1,4 @@
-# docpose
-A simple templating tool build with python utilizing jinja2
+# DOCPOSE
+A templating engine build on top of python and jinja2.
+
+continue..
