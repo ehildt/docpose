@@ -17,5 +17,10 @@ def create_args():
     parser.add_argument(
         "-i", "--init", action="store_true", help="Initialize a docpose example config"
     )
+    parser.add_argument(
+        "-v", "--version", 
+        action="store_true", 
+        help="Show the docpose version number"
+    )
 
     return parser.parse_args()

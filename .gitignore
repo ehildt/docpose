@@ -1,2 +1,6 @@
 __pycache__
 build
+compose.yml
+dist
+.docpose-sample.yml
+web-ui.yml

@@ -1,3 +1,0 @@
-pyinstaller
-jinja2
-pyyaml

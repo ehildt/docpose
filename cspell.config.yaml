@@ -1,0 +1,12 @@
+version: "0.2"
+ignorePaths: []
+dictionaryDefinitions: []
+dictionaries: []
+words:
+  - acap
+  - kafdrop
+  - keydb
+  - rabbitmq
+  - WEBUI
+ignoreWords: []
+import: []

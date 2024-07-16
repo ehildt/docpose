@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union, Dict
+from typing import List, Optional, Union, Dict, Any
 
 
 @dataclass
@@ -63,7 +63,6 @@ class Compose:
 
 @dataclass
 class Config:
-    command: str
     source: Source
     compose: List[Compose] = field(
         default_factory=list,
@@ -71,3 +70,17 @@ class Config:
             "description": "List of compose objects or templates for Docker Compose."
         },
     )
+
+    def __post_init__(self):
+        # We do not need to do anything here for extra properties
+        # The extra properties are implicitly allowed and ignored
+        pass
+
+    def __init__(self, source: Source, compose: List[Compose] = None, **kwargs: Any):
+        # Initialize the base dataclass fields
+        object.__setattr__(self, "source", source)
+        object.__setattr__(self, "compose", compose if compose is not None else [])
+
+        # Handle extra properties (but do nothing with them in this case)
+        # They are implicitly ignored
+        self.extra_properties = kwargs

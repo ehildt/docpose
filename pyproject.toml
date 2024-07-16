@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "docpose"
+version = "1.1.6"
+description = "A small templating engine using a .docpose.yml file for generating documents"
+authors = ["Eugen Hildt <eugen.hildt@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "docpose", from = "src" },
+    { include = "libs", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+jinja2 = "^3.1.4"
+pyyaml = "^6.0.1"
+
+[tool.poetry.scripts]
+docpose = "docpose:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
