@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.1.6-blue)
+![Version](https://img.shields.io/badge/docpose-1.1.7-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
