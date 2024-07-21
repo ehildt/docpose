@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.1.8-blue)
+![Version](https://img.shields.io/badge/docpose-1.2.0-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
@@ -157,6 +157,7 @@ compose:
   - template: kafdrop.j2
     depends_on:
       - *KAFKA
+      - $USE_KAFKA
     output: *DEFAULT_OUTPUT
     
   - template: volumes.j2

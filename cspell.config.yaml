@@ -4,9 +4,12 @@ dictionaryDefinitions: []
 dictionaries: []
 words:
   - acap
+  - docpose
   - kafdrop
   - keydb
+  - MSBRIDGE
   - rabbitmq
+  - truthyfy
   - WEBUI
 ignoreWords: []
 import: []

@@ -53,21 +53,17 @@ def render_templates(config: Config):
                 # checks if template depends on a system variable
                 if dep.startswith('$'):
                     env = dep.split('$', 1).pop()
-                    if env in tpl_envs[item.template] and truthyfy(tpl_envs[item.template][env]):
-                        rendered_templates[item.template] = render_template(
-                            config.source.template_dir, item.template, tpl_envs[item.template]
-                        )
-                    else:
+                    if env not in tpl_envs[item.template] or not truthyfy(tpl_envs[item.template][env]):
                         print(f'[WARN] {item.template} => depends_on => {env}; dependency not satisfied (template skipped)')
-                # checks if template depends on another template
+                
+                # throw if dependency on another template is not satisfied
                 elif dep not in templates:
                     raise ValueError(
                         f"{item.template} depends on {dep} but {dep} is not composed"
                     )
-        # otherwise the template has no dependencies
-        else:
-            rendered_templates[item.template] = render_template(
-                config.source.template_dir, item.template, tpl_envs[item.template]
-            )
+
+        rendered_templates[item.template] = render_template(
+            config.source.template_dir, item.template, tpl_envs[item.template]
+        )
 
     return rendered_templates

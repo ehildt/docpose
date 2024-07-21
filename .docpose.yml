@@ -1,68 +1,50 @@
-
 backend: &BACKEND backend.j2
 kafka: &KAFKA kafka.j2
-webui: &WEBUI web-ui.j2
+kafdrop: &KAFDROP kafdrop.j2
+webui: &WEBUI webui.j2
 keydb: &KEYDB keydb.j2
 mongo: &MONGO mongo.j2
 minio: &MINIO minio.j2
-
-default_output: &DEFAULT_OUTPUT compose.yml
-webui_output: &WEBUI_OUTPUT web-ui.yml
+msbridge: &MSBRIDGE ms-bridge.j2
 
 source:
   template_dir: .templates
-  outputs:
-    - *DEFAULT_OUTPUT
-    - *WEBUI_OUTPUT
+  outputs: compose.yml
   env_files:
-    - .env
-    - .env.local
-  environment:
-    - NODE_ENV: local
-    - TARGET: local
+    - apps/backend/env/.env
+    - apps/backend/env/.env.local
+    - apps/ms-bridge/env/.env
+    - apps/ms-bridge/env/.env.local
+    - .env.global
 
 compose:
   - service.j2
+
   - template: *BACKEND
     environment:
       - TARGET: production
-    output: *DEFAULT_OUTPUT
     depends_on:
-      - *KAFKA
       - *KEYDB
       - *MONGO
       - *MINIO
 
   - template: *KEYDB
-    output: *DEFAULT_OUTPUT
-
   - template: *MONGO
-    output: *DEFAULT_OUTPUT
-
   - template: *MINIO
-    output: *DEFAULT_OUTPUT
 
   - template: *WEBUI
-    output: *WEBUI_OUTPUT
     depends_on:
       - *BACKEND
 
-  - template: *KAFKA
-    output: *DEFAULT_OUTPUT
-    environment:
-      - PASSWORD: $PASSWORD
-        toEqual: 1234
-      - USERNAME: $USERNAME
-        toEqual: admin
+  - template: *MSBRIDGE
+    depends_on:
+      - *KEYDB
 
-  - template: kafdrop.j2
+  - template: *KAFKA
+  - template: *KAFDROP
     depends_on:
       - *KAFKA
       - $USE_KAFKA
-    output: *DEFAULT_OUTPUT
-    
-  - template: volumes.j2
-    output: *DEFAULT_OUTPUT
 
+  - template: volumes.j2
   - template: networks.j2
-    output: *DEFAULT_OUTPUT
