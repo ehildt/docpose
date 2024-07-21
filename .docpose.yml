@@ -35,18 +35,12 @@ compose:
 
   - template: *KEYDB
     output: *DEFAULT_OUTPUT
-    depends_on:
-      - *BACKEND
 
   - template: *MONGO
     output: *DEFAULT_OUTPUT
-    depends_on:
-      - *BACKEND
 
   - template: *MINIO
     output: *DEFAULT_OUTPUT
-    depends_on:
-      - *BACKEND
 
   - template: *WEBUI
     output: *WEBUI_OUTPUT
@@ -64,6 +58,7 @@ compose:
   - template: kafdrop.j2
     depends_on:
       - *KAFKA
+      - $USE_KAFKA
     output: *DEFAULT_OUTPUT
     
   - template: volumes.j2

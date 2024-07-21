@@ -37,7 +37,7 @@ def get_envs_to_template(config: Config) -> Dict:
                     and j not in TO_CONTAIN
                 ):
                     val = get_env_from_os(env[j])
-                    if compose_item_validator(j, val, env):
+                    if compose_item_validator(item.template, j, val, env):
                         com_envs[j] = val
 
         compose_envs[item.template] = com_envs

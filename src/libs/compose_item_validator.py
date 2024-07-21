@@ -35,9 +35,9 @@ def to_boolean(value: Any) -> bool:
     raise ValueError("Cannot cast to boolean")
 
 
-def compose_item_validator(env, value, conditions):
+def compose_item_validator(template: str, env, value, conditions):
     if unresolvableEnv(value):
-        print(f"[WARN] {env}: {value} could not be resolved")
+        print(f"[WARN] {template} => environment => {env}: {value}; could not be resolved (was this intentional?)")
         return False
 
     if TO_CONTAIN in conditions:

@@ -4,6 +4,27 @@ from .dict_to_dataclass import dict_to_dataclass
 from .get_envs_to_template import get_envs_to_template
 from .config_classes import Compose, Config
 
+def truthyfy(val: str) -> bool:
+    val = val.strip()
+    
+    if val in ['""', "''"]:
+        return False
+    
+    try:
+        return bool(int(val))
+    except ValueError:
+        pass
+    
+    try:
+        return bool(float(val))
+    except ValueError:
+        pass
+    
+    if val.lower() in ['true', 'false']:
+        return val.lower() == 'true'
+    
+    return bool(val)
+
 
 def render_template(template_dir, template_name, context):
     try:
@@ -27,13 +48,24 @@ def render_templates(config: Config):
 
         item = dict_to_dataclass(Compose, item)
 
-        for dep in item.depends_on:
-            if dep not in templates:
-                raise ValueError(
-                    f"{item.template} depends on {dep} but {dep} is not composed"
-                )
-
-        if item.template:
+        if item.depends_on:
+            for dep in item.depends_on:
+                # checks if template depends on a system variable
+                if dep.startswith('$'):
+                    env = dep.split('$', 1).pop()
+                    if env in tpl_envs[item.template] and truthyfy(tpl_envs[item.template][env]):
+                        rendered_templates[item.template] = render_template(
+                            config.source.template_dir, item.template, tpl_envs[item.template]
+                        )
+                    else:
+                        print(f'[WARN] {item.template} => depends_on => {env}; dependency not satisfied (template skipped)')
+                # checks if template depends on another template
+                elif dep not in templates:
+                    raise ValueError(
+                        f"{item.template} depends on {dep} but {dep} is not composed"
+                    )
+        # otherwise the template has no dependencies
+        else:
             rendered_templates[item.template] = render_template(
                 config.source.template_dir, item.template, tpl_envs[item.template]
             )

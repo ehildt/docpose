@@ -33,15 +33,10 @@ class Source:
 
 
 @dataclass
-class DependsOn:
-    template: str
-
-
-@dataclass
 class Compose:
     template: str
     output: Optional[str] = None
-    depends_on: List[DependsOn] = field(
+    depends_on: List[str] = field(
         default_factory=list,
         metadata={
             "description": "List of templates that this service depends on. Can reference other templates or system variables."

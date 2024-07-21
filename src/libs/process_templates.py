@@ -20,8 +20,9 @@ def process_templates(config, rendered_templates):
                 continue
 
             if "output" in conf and o in conf["output"]:
-                outputs.append(rendered_templates[conf["template"]])
-                continue
+                if conf["template"] in rendered_templates:
+                    outputs.append(rendered_templates[conf["template"]])
+                    continue
 
             if "template" in conf and "output" not in conf:
                 rendered = rendered_templates[conf["template"]]

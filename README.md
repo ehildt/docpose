@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.1.7-blue)
+![Version](https://img.shields.io/badge/docpose-1.1.8-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
@@ -20,7 +20,7 @@ A small and simple templating engine build on top of python and jinja2.
 
 - Install docpose `pip3 install docpose`
 - Generate a sample **.docpose-sample.yml** `docpose -i`
-- Edit the **.docpose-sample.yml**
+- Edit the **.docpose-sample.yml** and if necessary rename it aka .docpose.yml
 - Generate the **compose.yml** with `docpose -c .docpose.yml (the renamed sample file)`
 
 ### The Config YML Explained
@@ -44,12 +44,15 @@ Define the source which tells docpose where to find the templates etc.
 ```yml
 source:
   template_dir: .templates  # path to templates
+
   outputs:                  # can be a string or a list of strings
-    - *DEFAULT_OUTPUT       # one of the constants which we defined
-    - *WEBUI_OUTPUT         # use the value directly (web-ui.yml)
+    - *DEFAULT_OUTPUT       # use either a constant which we defined as an anchor
+    - *WEBUI_OUTPUT         # or, if you don't like yml anchors, use the value directly (web-ui.yml)
+
   env_files:                # a list of .env files which are used as a default
     - .env                  # except for the .env.local other .env files need to exist
     - .env.local            # this file is always optional, overwrites vars coming from the other files
+
   environment:              # an alternative way to set system variables. these overwrite those in env_files 
     - NODE_ENV: local       # NODE_ENV will overwrite the system variable (NODE_ENV) coming from env_files
     - TARGET: local         # TARGET will overwrite the system variable (TARGET) coming from env_files
@@ -66,7 +69,7 @@ compose:
 
     - template: service.j2      # a template can also have it's own "context"
 
-      environment:              # overwrites the system environment variables 
+      environment:              # (optional) overwrites the system environment variables
         - TARGET: <value>       # overwrites TARGET for this particular template
           toBeGoE: <number>     # checks if TARGET is greater or equal to <number>
           toBeLoE: <number>     # checks if TARGET is less or equal to <number>
@@ -74,13 +77,15 @@ compose:
           toEqual: <value>      # will check TARGET for strict equality.
                                 # supported types: [string|int|float|boolean|$SYSTEM_VARS] 
 
-      output: *DEFAULT_OUTPUT   # if outputs is a list, then output is mandatory
+      output: *DEFAULT_OUTPUT   # if source::outputs is a list, then output is mandatory
                                 # the output needs to be one of the 
-                                # values which are declared in outputs 
+                                # values which are declared in source::outputs 
 
-      depends_on:               # the depends_on checks the dependency on another template
+      depends_on:               # (optional) the depends_on checks the dependency on another template
             - *KAFKA            # checks, if the kafka template is part of the composition
             - *KEYDB            # if the dependency is not fulfilled, an error is thrown
+            - $ENV_VAR          # checks if $ENV_VAR resolves to true; skips the template otherwise  
+                                # $ENV_VAR is falsy if it's an empty string, 0, false
 ```
 
 Here is a full example of how a template composition could look like:
