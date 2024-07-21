@@ -16,7 +16,7 @@
     {%- if USE_KEYDB %}
       - keydb
     {%- endif %} 
-    {%- if USE_KAFKA or USE_MQTT or USE_RABBITMQ %}
+    {%- if (USE_KAFKA or USE_MQTT or USE_RABBITMQ) and USE_BULLMQ%}
       - msbridge
     {%- endif %} 
     env_file:

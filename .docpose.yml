@@ -41,6 +41,8 @@ compose:
       - *KEYDB
 
   - template: *KAFKA
+    depends_on:
+      - $USE_KAFKA
   - template: *KAFDROP
     depends_on:
       - *KAFKA

@@ -39,6 +39,7 @@ def render_templates(config: Config):
     tpl_envs = get_envs_to_template(config)
     templates = get_templates(config.compose)
     rendered_templates = {}
+    skipped_templates = []
     for item in config.compose:
         if isinstance(item, str):
             rendered_templates[item] = render_template(
@@ -54,6 +55,7 @@ def render_templates(config: Config):
                 if dep.startswith('$'):
                     env = dep.split('$', 1).pop()
                     if env not in tpl_envs[item.template] or not truthyfy(tpl_envs[item.template][env]):
+                        skipped_templates.append(item.template)
                         print(f'[WARN] {item.template} => depends_on => {env}; dependency not satisfied (template skipped)')
                 
                 # throw if dependency on another template is not satisfied
@@ -62,8 +64,9 @@ def render_templates(config: Config):
                         f"{item.template} depends on {dep} but {dep} is not composed"
                     )
 
-        rendered_templates[item.template] = render_template(
-            config.source.template_dir, item.template, tpl_envs[item.template]
-        )
+        if item.template not in skipped_templates:
+            rendered_templates[item.template] = render_template(
+                config.source.template_dir, item.template, tpl_envs[item.template]
+            )
 
     return rendered_templates

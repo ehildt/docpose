@@ -25,8 +25,9 @@ def process_templates(config, rendered_templates):
                     continue
 
             if "template" in conf and "output" not in conf:
-                rendered = rendered_templates[conf["template"]]
-                if rendered not in outputs:
-                    outputs.append(rendered)
+                if conf["template"] in rendered_templates:
+                    rendered = rendered_templates[conf["template"]]
+                    if rendered not in outputs:
+                        outputs.append(rendered)
 
         write_to_file(o, "\n\n".join(outputs))
