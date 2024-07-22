@@ -3,8 +3,13 @@ from .get_templates import get_templates
 from .dict_to_dataclass import dict_to_dataclass
 from .get_envs_to_template import get_envs_to_template
 from .config_classes import Compose, Config
+from typing import Any
 
-def truthyfy(val: str) -> bool:
+def truthyfy(val: Any) -> bool:
+    
+    if not isinstance(val, str):
+        val = f"{val}"
+        
     val = val.strip()
     
     if val in ['""', "''"]:

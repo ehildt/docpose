@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.2.1-blue)
+![Version](https://img.shields.io/badge/docpose-1.2.2-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
@@ -22,6 +22,8 @@ A small and simple templating engine build on top of python and jinja2.
 - Generate a sample **.docpose-sample.yml** `docpose -i`
 - Edit the **.docpose-sample.yml** and if necessary rename it aka .docpose.yml
 - Generate the **compose.yml** with `docpose -c .docpose.yml (the renamed sample file)`
+- This will output the filename to whatever was specified in outputs
+- Use it with your favorite tool like docker compose `docpose -c .docpose.yml && docker compose up`
 
 ### The Config YML Explained
 
