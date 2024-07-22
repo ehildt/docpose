@@ -26,18 +26,30 @@ def is_boolean(value: Any) -> bool:
 def to_boolean(value: Any) -> bool:
     if isinstance(value, bool):
         return value
+
+    if value in ['""', "''"]:
+        return False
+
     if isinstance(value, str):
         value_lower = value.lower()
         if value_lower == "true":
             return True
         elif value_lower == "false":
             return False
+
+    if isinstance(value, int) or isinstance(value, float):
+        if value == int(0):
+            return False
+        return True
+
     raise ValueError("Cannot cast to boolean")
 
 
 def compose_item_validator(template: str, env, value, conditions):
     if unresolvableEnv(value):
-        print(f"[WARN] {template} => environment => {env}: {value}; could not be resolved (was this intentional?)")
+        print(
+            f"[WARN] {template} => environment => {env}: {value}; could not be resolved (was this intentional?)"
+        )
         return False
 
     if TO_CONTAIN in conditions:

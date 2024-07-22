@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.2.2-blue)
+![Version](https://img.shields.io/badge/docpose-1.2.4-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
@@ -183,10 +183,10 @@ A template follows the syntax of the popular python library [jinja2](https://pal
       - ./apps/backend:/app
       - ./node_modules:/node_modules
     depends_on:
-    {%- if USE_MONGODB %}
+    {%- if USE_MONGODB %}       # behaves truthy by default 
       - mongo
     {%- endif %} 
-    {%- if USE_MINIO %}
+    {%- if USE_MINIO | bool %}  # use the bool filter to evaluate the string-boolean's truthiness
       - minio
     {%- endif %} 
     {%- if USE_KEYDB %}

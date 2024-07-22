@@ -1,6 +1,5 @@
 from .challenge_env import get_env_var_from_line
 
-
 def parse_env_file(env_path: str):
     env_vars = {}
     try:

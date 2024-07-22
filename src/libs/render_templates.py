@@ -3,37 +3,14 @@ from .get_templates import get_templates
 from .dict_to_dataclass import dict_to_dataclass
 from .get_envs_to_template import get_envs_to_template
 from .config_classes import Compose, Config
-from typing import Any
-
-def truthyfy(val: Any) -> bool:
-    
-    if not isinstance(val, str):
-        val = f"{val}"
-        
-    val = val.strip()
-    
-    if val in ['""', "''"]:
-        return False
-    
-    try:
-        return bool(int(val))
-    except ValueError:
-        pass
-    
-    try:
-        return bool(float(val))
-    except ValueError:
-        pass
-    
-    if val.lower() in ['true', 'false']:
-        return val.lower() == 'true'
-    
-    return bool(val)
+from .compose_item_validator import to_boolean
+from .jinja2_extend_filters import jinja2_extend_filters
 
 
 def render_template(template_dir, template_name, context):
     try:
         env = Environment(loader=FileSystemLoader(template_dir))
+        env = jinja2_extend_filters(env)
         template = env.get_template(template_name)
         return template.render(context)
     except TemplateError as e:
@@ -57,12 +34,16 @@ def render_templates(config: Config):
         if item.depends_on:
             for dep in item.depends_on:
                 # checks if template depends on a system variable
-                if dep.startswith('$'):
-                    env = dep.split('$', 1).pop()
-                    if env not in tpl_envs[item.template] or not truthyfy(tpl_envs[item.template][env]):
+                if dep.startswith("$"):
+                    env = dep.split("$", 1).pop()
+                    if env not in tpl_envs[item.template] or not to_boolean(
+                        tpl_envs[item.template][env]
+                    ):
                         skipped_templates.append(item.template)
-                        print(f'[WARN] {item.template} => depends_on => {env}; dependency not satisfied (template skipped)')
-                
+                        print(
+                            f"[WARN] {item.template} => depends_on => {env}; dependency not satisfied (template skipped)"
+                        )
+
                 # throw if dependency on another template is not satisfied
                 elif dep not in templates:
                     raise ValueError(
