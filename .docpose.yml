@@ -9,6 +9,7 @@ msbridge: &MSBRIDGE ms-bridge.j2
 
 source:
   template_dir: .templates
+  delimiter: '\n'
   outputs: compose.yml
   env_files:
     - apps/backend/env/.env

@@ -18,6 +18,7 @@ class EnvCondition:
 class Source:
     template_dir: Optional[str] = ".python/templates"
     outputs: Optional[Union[str, List[str]]] = ".compose.yml"
+    delimiter: Optional[str] = '\n\n'
     env_files: List[str] = field(
         default_factory=list,
         metadata={

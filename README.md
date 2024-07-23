@@ -1,12 +1,14 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.2.4-blue)
+![Version](https://img.shields.io/badge/docpose-1.2.5-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
 ![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 A small and simple templating engine build on top of python and jinja2.
+
+> Works with any text based files aka `.txt` `.yml` `.json` `.xml` `.html` etc.
 
 ## COMMANDS
 
@@ -46,6 +48,9 @@ Define the source which tells docpose where to find the templates etc.
 ```yml
 source:
   template_dir: .templates  # path to templates
+
+  delimiter: '\n'           # (optional) how the templates are patched together.
+                            # by default two line breaks `\n\n` follow after every template 
 
   outputs:                  # can be a string or a list of strings
     - *DEFAULT_OUTPUT       # use either a constant which we defined as an anchor

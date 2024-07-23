@@ -29,5 +29,4 @@ def process_templates(config, rendered_templates):
                     rendered = rendered_templates[conf["template"]]
                     if rendered not in outputs:
                         outputs.append(rendered)
-
-        write_to_file(o, "\n\n".join(outputs))
+        write_to_file(o, config.source.delimiter.replace("\\n", "\n").join(outputs))

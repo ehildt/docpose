@@ -11,7 +11,7 @@ def main():
     if args.init:
         write_to_file(DEFAULT_CONFIG_SAMPLE_FILE, SAMPLE_CONFIG)
     elif args.version:
-        print("v1.2.4")
+        print("v1.2.5")
     else:
         config = read_config_yml(args.config)
         rendered_templates = render_templates(config)
