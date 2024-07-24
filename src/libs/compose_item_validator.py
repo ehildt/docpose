@@ -23,7 +23,7 @@ def is_boolean(value: Any) -> bool:
     return False
 
 
-def to_boolean(value: Any) -> bool:
+def to_boolean(template: str, key: str, value: Any) -> bool:
     if isinstance(value, bool):
         return value
 
@@ -36,6 +36,9 @@ def to_boolean(value: Any) -> bool:
             return True
         elif value_lower == "false":
             return False
+        elif value_lower.count() > 0:
+            print(f'[WARN] {template} => {key}: {value} resolved as truthy')
+            return True
 
     if isinstance(value, int) or isinstance(value, float):
         if value == int(0):

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docpose"
-version = "1.2.5"
+version = "1.2.6"
 description = "A small templating engine using a .docpose.yml file for generating documents"
 authors = ["Eugen Hildt <eugen.hildt@gmail.com>"]
 license = "MIT"
@@ -11,7 +11,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10, <3.13"
+python = ">=3.10"
 jinja2 = "^3.1.4"
 pyyaml = "^6.0.1"
 
