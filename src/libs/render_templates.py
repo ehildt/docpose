@@ -5,6 +5,7 @@ from .get_envs_to_template import get_envs_to_template
 from .config_classes import Compose, Config
 from .compose_item_validator import to_boolean
 from .jinja2_extend_filters import jinja2_extend_filters
+from .store import warn
 
 
 def render_template(template_dir, template_name, context):
@@ -37,12 +38,12 @@ def render_templates(config: Config):
                 if dep.startswith("$"):
                     env = dep.split("$", 1).pop()
                     if env not in tpl_envs[item.template] or not to_boolean(
-                        tpl_envs[item.template][env]
+                        tpl_envs[item.template][env],
+                        env,
+                        item.template,
+                        'depends_on'
                     ):
                         skipped_templates.append(item.template)
-                        print(
-                            f"[WARN] {item.template} => depends_on => {env}; dependency not satisfied (template skipped)"
-                        )
 
                 # throw if dependency on another template is not satisfied
                 elif dep not in templates:

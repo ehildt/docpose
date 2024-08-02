@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.2.5-blue)
+![Version](https://img.shields.io/badge/docpose-1.2.6-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
@@ -9,6 +9,8 @@
 A small and simple templating engine build on top of python and jinja2.
 
 > Works with any text based files aka `.txt` `.yml` `.json` `.xml` `.html` etc.
+
+> An excellent complement to Docker profiles and extensions, and similar technologies.
 
 ## COMMANDS
 
@@ -31,7 +33,7 @@ A small and simple templating engine build on top of python and jinja2.
 
 Create **constants** so that you can reuse them across the yml file (anchors):
 
-```yml
+```yaml
 backend: &BACKEND backend.j2
 kafka: &KAFKA kafka.j2
 webui: &WEBUI web-ui.j2
@@ -45,7 +47,7 @@ webui_output: &WEBUI_OUTPUT web-ui.yml
 
 Define the source which tells docpose where to find the templates etc.
 
-```yml
+```yaml
 source:
   template_dir: .templates  # path to templates
 
@@ -67,7 +69,7 @@ source:
 
 Before we move on, let's talk about the optional template context.
 
-```yml
+```yaml
 compose: 
     - service.j2                # a template can be a simple string
                                 # in this case the template has access 
@@ -97,7 +99,7 @@ compose:
 
 Here is a full example of how a template composition could look like:
 
-```yml
+```yaml
 backend: &BACKEND backend.j2    # using yaml anchors to omit value redundancy and hardcoding
 kafka: &KAFKA kafka.j2
 webui: &WEBUI web-ui.j2
@@ -121,7 +123,8 @@ source:
     - TARGET: local
 
 compose:
-  - service.j2
+  - service.j2                  # you don't need to use yaml anchors for everything
+                                # sometimes a plain string is more than enough
 
   - template: *BACKEND
     environment:
@@ -178,7 +181,7 @@ compose:
 
 A template follows the syntax of the popular python library [jinja2](https://palletsprojects.com/p/jinja/).
 
-```j2
+```yml
   backend:
     container_name: backend
     build:
@@ -192,7 +195,7 @@ A template follows the syntax of the popular python library [jinja2](https://pal
       - mongo
     {%- endif %} 
     {%- if USE_MINIO | bool %}  # use the bool filter to evaluate the string-boolean's truthiness
-      - minio
+      - minio                   # otherwise "false" will be truthy since it's not an empty string
     {%- endif %} 
     {%- if USE_KEYDB %}
       - keydb
@@ -203,7 +206,7 @@ A template follows the syntax of the popular python library [jinja2](https://pal
     env_file:
       - ./apps/backend/env/.env
     environment:
-      - NODE_ENV={{ TARGET }}
+      - NODE_ENV={{TARGET}}
       - PRINT_ENV=false
     ports:
       - 3001:3001

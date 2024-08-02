@@ -9,7 +9,7 @@ msbridge: &MSBRIDGE ms-bridge.j2
 
 source:
   template_dir: .templates
-  delimiter: '\n'
+  delimiter: '\n\n'
   outputs: compose.yml
   env_files:
     - apps/backend/env/.env
@@ -19,7 +19,7 @@ source:
     - .env.global
 
 compose:
-  - service.j2
+  - services.j2
 
   - template: *BACKEND
     environment:
@@ -44,10 +44,17 @@ compose:
   - template: *KAFKA
     depends_on:
       - $USE_KAFKA
+      
   - template: *KAFDROP
     depends_on:
       - *KAFKA
       - $USE_KAFKA
 
   - template: volumes.j2
+    depends_on:
+      - $USE_RABBITMQ
+
   - template: networks.j2
+    environment:
+      - USE_PUBSUB: $USE_PUBSUB
+      - USER_NAME: '$XYZ'

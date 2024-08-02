@@ -1,4 +1,5 @@
 from typing import Any
+from .store import warn
 
 from libs.constants import (
     TO_BE_LOE,
@@ -23,33 +24,39 @@ def is_boolean(value: Any) -> bool:
     return False
 
 
-def to_boolean(value: Any) -> bool:
+def to_boolean(value: Any, key: str, template: str, rule: str) -> bool:
     if isinstance(value, bool):
         return value
 
-    if value in ['""', "''"]:
-        return False
-
     if isinstance(value, str):
-        value_lower = value.lower()
-        if value_lower == "true":
+        value_stripped = value.strip().lower()
+        if value_stripped in ['true', '"true"', "'true'"]:
             return True
-        elif value_lower == "false":
+        elif value_stripped in ['false', '"false"', "'false'", '']:
+            warn(template, rule, {key: value}, 'falsy')
             return False
+        # Attempt to convert the string to a number
+        try:
+            numeric_value = float(value_stripped)
+            if numeric_value == 0:
+                warn(template, rule, {key: value}, 'falsy')
+                return False
+            else:
+                warn(template, rule, {key: value}, 'truthy')
+                return True
+        except ValueError:
+            warn(template, rule, {key: value}, 'truthy')
+            return True
 
-    if isinstance(value, int) or isinstance(value, float):
-        if value == int(0):
-            return False
-        return True
+    if isinstance(value, (int, float)):
+        return value != 0
 
-    raise ValueError("Cannot cast to boolean")
+    raise ValueError(f"{template} => {key}; cannot be cast to boolean: {value}")
 
 
 def compose_item_validator(template: str, env, value, conditions):
     if unresolvableEnv(value):
-        print(
-            f"[WARN] {template} => environment => {env}: {value}; could not be resolved (was this intentional?)"
-        )
+        warn(template, 'environment', {env: value}, 'truthy')
         return False
 
     if TO_CONTAIN in conditions:
@@ -77,7 +84,7 @@ def compose_item_validator(template: str, env, value, conditions):
                 raise ValueError(f"{env} - {value} does not equal {expected_value}")
 
         elif isinstance(expected_value, bool) and boolean:
-            if to_boolean(value) == expected_value:
+            if to_boolean(value, env, template, 'environment') == expected_value:
                 raise ValueError(f"{env} - {boolean} does not equal {expected_value}")
 
     if isinstance(value, str) and value.startswith("$"):
