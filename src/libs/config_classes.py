@@ -68,15 +68,10 @@ class Config:
     )
 
     def __post_init__(self):
-        # We do not need to do anything here for extra properties
-        # The extra properties are implicitly allowed and ignored
-        pass
+        for key in self.extra_properties:
+            print(f"Unexpected property: {key}")
 
     def __init__(self, source: Source, compose: List[Compose] = None, **kwargs: Any):
-        # Initialize the base dataclass fields
         object.__setattr__(self, "source", source)
         object.__setattr__(self, "compose", compose if compose is not None else [])
-
-        # Handle extra properties (but do nothing with them in this case)
-        # They are implicitly ignored
         self.extra_properties = kwargs

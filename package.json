@@ -1,0 +1,10 @@
+{
+  "name": "docpose",
+  "description": "This `package.json` is used solely to verify that the `docpose` command works with `npm`, `pnpm` etc.",
+  "scripts": {
+    "docpose": "docpose -c .docpose.yml"
+  },
+  "keywords": [],
+  "author": "Eugen Hildt",
+  "license": "MIT"
+}
