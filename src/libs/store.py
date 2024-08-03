@@ -27,25 +27,30 @@ def warn(template: str, rule_name: str, rules: Dict[str, str], message: str):
         entry.key_value_messages.append(KeyValueMessage(variable_key=key, variable_value=value, message=message, rule_name=rule_name))
 
 def print_warnings():
-    # Calculate maximum widths for dynamic formatting
-    max_key_width = max(len(kv_message.variable_key) for entry in warnings.values() for kv_message in entry.key_value_messages)
-    max_value_width = max(len(kv_message.variable_value) for entry in warnings.values() for kv_message in entry.key_value_messages)
-    max_rule_width = max(len(kv_message.rule_name) for entry in warnings.values() for kv_message in entry.key_value_messages)
-    max_message_width = max(len(kv_message.message) for entry in warnings.values() for kv_message in entry.key_value_messages)
+    if not warnings:
+        print(f"\n[{Fore.YELLOW}DOCPOSE{Style.RESET_ALL}] file(s) generated!")
+        return
 
-    # Calculate padding for alignment
-    key_value_padding = max_key_width + max_value_width + 5  # Padding between key-value and message
+    max_key_width = max((len(kv_message.variable_key) for entry in warnings.values() for kv_message in entry.key_value_messages), default=0)
+    max_value_width = max((len(kv_message.variable_value) for entry in warnings.values() for kv_message in entry.key_value_messages), default=0)
+    max_rule_width = max((len(kv_message.rule_name) for entry in warnings.values() for kv_message in entry.key_value_messages), default=0)
+    max_message_width = max((len(kv_message.message) for entry in warnings.values() for kv_message in entry.key_value_messages), default=0)
 
-    # Print header
-    print(f"\n{Fore.YELLOW}#############################{Style.RESET_ALL}")
-    print(f"{Fore.YELLOW}###### DOCPOSE WARNING ######{Style.RESET_ALL}")
-    print(f"{Fore.YELLOW}#############################{Style.RESET_ALL}\n")
+    print(f"\n{Fore.YELLOW}#####################################################{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}################## DOCPOSE WARNINGS #################{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}#####################################################{Style.RESET_ALL}\n")
+    
+    print(
+        f"   {"ENVVAR":<{max_key_width}}   "
+        f"{"VALUE":<{max_value_width}}    "
+        f"{"SOURCE":<{max_rule_width}}  "
+        f"{"BOOLEAN".ljust(max_message_width)}\n"
+        f"-----------------------------------------------------"
+    )
 
-    # Print warnings
     for template, entry in warnings.items():
         print(f'{Fore.LIGHTCYAN_EX}{template}{Style.RESET_ALL}')
         for kv_message in entry.key_value_messages:
-            # Print formatted output with dynamic widths
             print(
                 f" * {Fore.LIGHTMAGENTA_EX}{kv_message.variable_key:<{max_key_width}}{Fore.RESET}   "
                 f"{Fore.LIGHTGREEN_EX}{kv_message.variable_value:<{max_value_width}}{Fore.RESET}    "
