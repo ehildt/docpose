@@ -36,16 +36,16 @@ def print_warnings():
     max_rule_width = max((len(kv_message.rule_name) for entry in warnings.values() for kv_message in entry.key_value_messages), default=0)
     max_message_width = max((len(kv_message.message) for entry in warnings.values() for kv_message in entry.key_value_messages), default=0)
 
-    print(f"\n{Fore.YELLOW}#####################################################{Style.RESET_ALL}")
-    print(f"{Fore.YELLOW}################## DOCPOSE WARNINGS #################{Style.RESET_ALL}")
-    print(f"{Fore.YELLOW}#####################################################{Style.RESET_ALL}\n")
+    print(f"\n{Fore.YELLOW}#########################################################{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}#################### DOCPOSE WARNINGS ###################{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}#########################################################{Style.RESET_ALL}\n")
     
     print(
         f"   {"ENVVAR":<{max_key_width}}   "
         f"{"VALUE":<{max_value_width}}    "
         f"{"SOURCE":<{max_rule_width}}  "
-        f"{"BOOLEAN".ljust(max_message_width)}\n"
-        f"-----------------------------------------------------"
+        f"{"RESOLVED_AS".ljust(max_message_width)}\n"
+        f"---------------------------------------------------------\n"
     )
 
     for template, entry in warnings.items():
@@ -57,3 +57,4 @@ def print_warnings():
                 f"{Fore.LIGHTYELLOW_EX}{kv_message.rule_name:<{max_rule_width}}{Style.RESET_ALL}  "
                 f"{Fore.RED}{kv_message.message.ljust(max_message_width)}{Style.RESET_ALL}"
             )
+        print()

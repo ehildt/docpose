@@ -1,6 +1,6 @@
 # DOCPOSE
 
-![Version](https://img.shields.io/badge/docpose-1.2.8-blue)
+![Version](https://img.shields.io/badge/docpose-1.2.9-blue)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 ![Jinja2](https://img.shields.io/badge/jinja2-2.11.3-green.svg)
 ![Open Source](https://badgen.net/badge/Open%20Source/❤/red)
@@ -94,7 +94,7 @@ compose:
             - *KAFKA            # checks, if the kafka template is part of the composition
             - *KEYDB            # if the dependency is not fulfilled, an error is thrown
             - $ENV_VAR          # checks if $ENV_VAR resolves to true; skips the template otherwise  
-                                # $ENV_VAR is falsy if it's an empty string, 0, false
+                                # $ENV_VAR is falsy if it's an empty string, 0, false or undefined
 ```
 
 Here is a full example of how a template composition could look like:

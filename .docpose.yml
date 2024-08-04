@@ -53,6 +53,7 @@ compose:
   - template: volumes.j2
     depends_on:
       - $USE_RABBITMQ
+      - $TEST_ME
 
   - template: networks.j2
     environment:

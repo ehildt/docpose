@@ -42,7 +42,11 @@ def render_templates(config: Config):
                         env,
                         item.template,
                         'depends_on'
-                    ):
+                    ):  
+                        skipped_templates.append(item.template)
+                        
+                    if env not in tpl_envs[item.template]:
+                        warn(item.template, 'depends_on', {env: 'undefined'}, 'falsy')
                         skipped_templates.append(item.template)
 
                 # throw if dependency on another template is not satisfied

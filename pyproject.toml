@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docpose"
-version = "1.2.8"
+version = "1.2.9"
 description = "A small templating engine using a .docpose.yml file for generating documents"
 authors = ["Eugen Hildt <eugen.hildt@gmail.com>"]
 license = "MIT"
